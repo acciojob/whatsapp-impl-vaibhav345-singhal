@@ -30,7 +30,7 @@ public class WhatsappRepository {
 
     public String createUser(String name, String mobile) throws Exception {
         if (userMobile.contains(mobile)) {
-            throw new Exception();
+            throw new UserExists("User already exists");
         }
         userMobile.add(mobile);
         return "SUCCESS";
@@ -64,7 +64,7 @@ public class WhatsappRepository {
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
-            throw new Exception();
+            throw new Exception("Group does not exist");
         }
 
         List<User> guserList = groupUserMap.get(group);
@@ -88,7 +88,7 @@ public class WhatsappRepository {
             }
         }
         if (!userExist) {
-            throw new Exception();
+            throw new Exception("You are not allowed to send message");
         } else {
             return messageCount;
         }
@@ -96,14 +96,14 @@ public class WhatsappRepository {
 
     public String changeAdmin(User approver, User user, Group group) throws Exception {
         if (!groupUserMap.containsKey(group)) {
-            throw new Exception();
+            throw new Exception("Group does not exist");
         }
 
         boolean userExist = false;
         if (adminMap.containsKey(group)) {
             User currAdmin = adminMap.get(group);
             if (!currAdmin.getMobile().equals(approver.getMobile())) {
-                throw new Exception();
+                throw new Exception("Approver does not have rights");
             } else {
                 List<User> guserList = groupUserMap.get(group);
                 for (User usr : guserList) {
@@ -114,7 +114,7 @@ public class WhatsappRepository {
                 }
             }
         }
-        if (!userExist) throw new Exception();
+        if (!userExist) throw new Exception("User is not a participant");
         else return "SUCCESS";
     }
 
@@ -123,6 +123,6 @@ public class WhatsappRepository {
     }
 
     public String findMessage(Date start, Date end, int k) {
-       return "SUCESS";
+        return "SUCCESS";
     }
 }
